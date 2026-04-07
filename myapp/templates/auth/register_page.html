@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | PixelShot</title>
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <style>
+        .focus-red:focus { border-color: #FF0000 !important; }
+        input { 
+            color: black !important; 
+            font-weight: 700 !important; 
+            transition: all 0.2s ease;
+        }
+        input:focus {
+            background-color: #fffcfc;
+        }
+        .icon-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .input-error { border-color: #FF0000 !important; background-color: #fff5f5 !important; }
+    </style>
+</head>
+
+<body class="bg-white text-black flex flex-col min-h-screen">
+    {% include 'components/_navbar.html' %}
+
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="max-w-2xl w-full bg-white p-8 rounded-sm border-2 border-gray-100 shadow-sm relative">
+            <div class="absolute top-0 left-0 w-full h-1 bg-[#FF0000]"></div>
+            
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-black text-black tracking-tighter uppercase italic">Pixel<span class="text-[#FF0000]">Shot</span></h2>
+                <p class="text-black mt-2 font-bold uppercase text-[10px] tracking-widest opacity-70">Initialize Membership</p>
+            </div>
+
+            <form id="registrationForm" method="POST" action="/register/" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="md:col-span-2 mb-6">
+                    <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider mb-3">
+                        <i data-lucide="image" class="w-3 h-3 text-[#FF0000]"></i> Profile Picture
+                    </label>
+                    <div class="flex items-center justify-center w-full">
+                        <label id="drop-zone" class="relative group flex flex-col items-center justify-center w-full h-52 border-2 border-gray-200 border-dashed rounded-sm cursor-pointer bg-gray-50 hover:bg-red-50/20 hover:border-[#FF0000] transition overflow-hidden">
+                            <div id="upload-placeholder" class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <div class="w-12 h-12 bg-white text-gray-400 rounded-full flex items-center justify-center mb-3 border border-gray-100 shadow-sm">
+                                    <i data-lucide="camera" class="w-6 h-6 text-[#FF0000]"></i>
+                                </div>
+                                <p class="text-[10px] text-gray-500 font-black uppercase">Upload Headshot</p>
+                            </div>
+                            <img id="image-preview" src="" style="display: none;" class="absolute inset-0 w-full h-full object-cover z-10" />
+                            <div id="change-overlay" style="display: none;" class="absolute inset-0 bg-black/40 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                <div class="bg-white/20 backdrop-blur-md px-4 py-2 border border-white/30">
+                                    <p class="text-white text-[10px] font-black uppercase tracking-widest italic">Change Photo</p>
+                                </div>
+                            </div>
+                            <input type="file" name="profile_picture" id="profile-input" accept="image/*" class="hidden" onchange="previewImage(this)" />
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="space-y-1">
+                        <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider">
+                            <i data-lucide="at-sign" class="w-3 h-3 text-[#FF0000]"></i> Username
+                        </label>
+                        <input type="text" name="username" placeholder="Enter Your Username" value="{{ data.username|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.username %}input-error{% endif %}">
+                        {% if errors.username %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.username }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider">
+                            <i data-lucide="mail" class="w-3 h-3 text-[#FF0000]"></i> Email Address
+                        </label>
+                        <input type="email" name="email" placeholder="Enter Your Email" value="{{ data.email|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.email %}input-error{% endif %}">
+                        {% if errors.email %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.email }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-black text-black uppercase italic tracking-wider">First Name</label>
+                        <input type="text" name="first_name" placeholder="Enter Your First Name" value="{{ data.first_name|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.first_name %}input-error{% endif %}">
+                        {% if errors.first_name %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.first_name }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-black text-black uppercase italic tracking-wider">Last Name</label>
+                        <input type="text" name="last_name" placeholder="Enter Your Last Name" value="{{ data.last_name|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.last_name %}input-error{% endif %}">
+                        {% if errors.last_name %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.last_name }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider">
+                            <i data-lucide="lock" class="w-3 h-3 text-[#FF0000]"></i> Password
+                        </label>
+                        <input type="password" name="password" placeholder="Enter Your Password" value="{{ data.password|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.password %}input-error{% endif %}">
+                        {% if errors.password %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.password }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider">
+                            <i data-lucide="shield-check" class="w-3 h-3 text-[#FF0000]"></i> Confirm Password
+                        </label>
+                        <input type="password" name="confirm_password" placeholder="Confirm Your Password" value="{{ data.confirm_password|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.confirm_password %}input-error{% endif %}">
+                        {% if errors.confirm_password %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.confirm_password }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider">
+                            <i data-lucide="map-pin" class="w-3 h-3 text-[#FF0000]"></i> Physical Address
+                        </label>
+                        <input type="text" name="address" placeholder="Enter Your Physical Address" value="{{ data.address|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.address %}input-error{% endif %}">
+                        {% if errors.address %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.address }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="icon-label text-[11px] font-black text-black uppercase italic tracking-wider">
+                            <i data-lucide="phone" class="w-3 h-3 text-[#FF0000]"></i> Phone Number
+                        </label>
+                        <input type="text" name="phone" placeholder="Enter Your Phone Number" value="{{ data.phone|default:'' }}" class="w-full p-3 border-2 border-gray-100 outline-none focus-red text-sm {% if errors.phone %}input-error{% endif %}">
+                        {% if errors.phone %}<p class="text-[10px] text-[#FF0000] font-bold uppercase tracking-tighter mt-1">{{ errors.phone }}</p>{% endif %}
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-[#FF0000] text-white font-black py-4 rounded-sm hover:bg-black transition-all active:scale-95 uppercase text-xs tracking-[0.2em] shadow-lg flex items-center justify-center gap-2">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> Create Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-10 text-center border-t border-gray-50 pt-6">
+                <p class="text-black text-[10px] font-bold uppercase tracking-widest opacity-60">Already a member? <a href="/login/" class="text-[#FF0000] hover:underline ml-1">Sign In</a></p>
+            </div>
+        </div>
+    </main>
+
+    {% include 'components/_footer.html' %}
+
+    <script src="{% static 'js/lucide.min.js' %}"></script>
+    <script>
+        lucide.createIcons();
+
+        function previewImage(input) {
+            const file = input.files[0];
+            const preview = document.getElementById('image-preview');
+            const placeholder = document.getElementById('upload-placeholder');
+            const overlay = document.getElementById('change-overlay');
+            const zone = document.getElementById('drop-zone');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    overlay.style.display = 'flex';
+                    zone.style.borderStyle = 'solid';
+                    zone.style.borderColor = '#FF0000';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -4,12 +4,11 @@ from django.db import models
 # User Table (Customer + Admin)
 class User(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
-    ROLE_CHOICES = (
-        ('customer', 'Customer'),
-        ('admin', 'Admin'),
-    )
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')
+    address = models.TextField(blank=True, null=True)   
+    is_verified = models.BooleanField(default=False)  # For email verification
+
+    profile_picture  = models.ImageField(upload_to='image/user/', blank=True, null=True)
+    auth_token = models.CharField(max_length=225, blank=True, null=True)  # Optional profile picture
 
     def __str__(self):
         return f"{self.username} ({self.role})"

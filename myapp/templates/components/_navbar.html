@@ -1,0 +1,50 @@
+<nav class="bg-white border-b-2 border-[#990000] sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-3 h-20 items-center">
+            
+            <div class="flex items-center justify-start">
+                <a href="/" class="flex items-center gap-2 group">
+                    <div class="bg-[#990000] p-2 rounded-sm text-white group-hover:bg-black transition-all duration-300 shadow-md">
+                        <i data-lucide="camera" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xl font-black tracking-tighter text-black uppercase italic">
+                        PIXEL<span class="text-[#990000]">SHOT</span>
+                    </span>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-center h-full">
+                <div class="relative w-full max-w-md group">
+                    <form action="/search/" method="GET" class="relative w-full m-0">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#990000]">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </div>
+                        <input type="text" name="q" placeholder="Search premium gear..." 
+                               class="block w-full pl-10 pr-3 py-2.5 border-2 border-gray-100 rounded-none bg-gray-50 text-black text-sm focus:ring-0 focus:border-[#990000] outline-none transition-all placeholder:text-gray-400">
+                    </form>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-6">
+                <a href="/cart/" class="relative p-2 text-gray-800 hover:text-[#990000] transition-colors">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span class="absolute top-0 right-0 bg-[#990000] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white shadow-sm">0</span>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <div class="flex items-center gap-3 pl-4 border-l-2 border-gray-100">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-[#990000] hidden md:block">{{ user.username }}</span>
+                        <div class="w-10 h-10 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-[#990000]">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex items-center space-x-6">
+                        <a href="/login/" class="text-[10px] font-black uppercase tracking-widest text-black hover:text-[#990000] transition-colors">Login</a>
+                        <a href="/register/" class="bg-[#990000] text-white text-[10px] font-black px-6 py-3 uppercase tracking-tighter hover:bg-black transition-all shadow-lg">Register</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

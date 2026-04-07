@@ -2,5 +2,5 @@ from django.shortcuts import render, redirect
 
 
 
-def homepage(request):
-    return render(request, 'main/homepage.html')
+def home_view(request):
+    return render(request, 'main/home_page.html')
