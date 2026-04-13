@@ -45,3 +45,31 @@ def password_reset_view(request):
 
         return render(request, 'main/password_reset_page.html', {'errors': errors})
     return render(request, 'main/password_reset_page.html')
+
+def password_reset_confirm_view(request, token):
+    errors = {}
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not password:
+            errors['password'] = "Password is required."
+        if password != confirm_password:
+            errors['confirm_password'] = "Passwords do not match."
+
+        if not errors:
+            try:
+                user = User.objects.get(auth_token=token)
+                user.set_password(password)
+                user.auth_token = None
+                user.save()
+
+                messages.success(request, "Your password has been reset successfully. You can now log in.")
+                return redirect('/login/')
+            
+            except User.DoesNotExist:
+                messages.error(request, "Invalid or expired token.")
+                return redirect('/password-reset/')
+            
+        return render(request, 'main/password_reset_confirm_page.html', { 'data': request.POST, 'errors': errors})
+    return render(request, 'main/password_reset_confirm_page.html')   

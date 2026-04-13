@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate, login, logout
 from ..models import User
 import uuid 
@@ -92,8 +93,14 @@ def login_view(request):
 
         if not username:
             errors['username']= "Username is required."
+        elif not User.objects.filter(username=username).exists():
+            errors['username']= "No account found with that username."
+
+        hashed_password = User.objects.filter(username=username).values_list('password', flat=True).first()
         if not password:
             errors['password']= "Password is required."
+        elif not check_password(password, hashed_password):
+            errors['password']= "Invalid password."
 
         if not errors:
             user = authenticate(request, username=username, password=password)
