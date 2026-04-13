@@ -114,8 +114,7 @@ def send_verification_email(subject, message, recipient):
     except Exception as e:
         print(f"SMTP Error: {e}")
 
-
-
+@login_required
 def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out.")
