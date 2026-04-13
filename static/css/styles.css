@@ -416,7 +416,7 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: none;
 }
 
-.active\:scale-95, .group-hover\:scale-110 {
+.transform, .active\:scale-95, .group-hover\:scale-110 {
   --tw-translate-x: 0;
   --tw-translate-y: 0;
   --tw-rotate: 0;
@@ -664,6 +664,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 18rem;
 }
 
+.h-3\.5 {
+  height: 0.875rem;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -708,6 +712,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 5rem;
 }
 
+.w-3\.5 {
+  width: 0.875rem;
+}
+
 .max-w-sm {
   max-width: 24rem;
 }
@@ -734,6 +742,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .flex-grow {
   flex-grow: 1;
+}
+
+.transform {
+  transform: var(--tw-transform);
 }
 
 @keyframes pulse {
@@ -816,6 +828,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .gap-10 {
   gap: 2.5rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -1307,6 +1323,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1554,6 +1575,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .md\:flex-row {
     flex-direction: row;
+  }
+
+  .md\:p-10 {
+    padding: 2.5rem;
   }
 
   .md\:text-8xl {

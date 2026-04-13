@@ -8,6 +8,11 @@ from ..models import User
 import uuid 
 import threading
 
+def send_verification_email(subject, message, recipient):
+    try:
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], fail_silently=False)
+    except Exception as e:
+        print(f"SMTP Error: {e}")
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -108,11 +113,6 @@ def login_view(request):
         return render(request, 'auth/login_page.html', {'data': request.POST, 'errors': errors})
     return render(request, 'auth/login_page.html')
 
-def send_verification_email(subject, message, recipient):
-    try:
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], fail_silently=False)
-    except Exception as e:
-        print(f"SMTP Error: {e}")
 
 @login_required
 def logout_view(request):
