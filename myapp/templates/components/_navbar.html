@@ -33,9 +33,10 @@
 
                 {% if user.is_authenticated %}
                     <div class="flex items-center gap-3 pl-4 border-l-2 border-gray-100">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-[#990000] hidden md:block">{{ user.username }}</span>
                         <div class="w-10 h-10 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border-2 border-[#990000]">
-                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <a href="/profile/">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </a>
                         </div>
                     </div>
                 {% else %}

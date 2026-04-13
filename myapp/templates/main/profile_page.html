@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Profile | PixelShot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .pixel-border { border: 3px solid #000000; }
+        .pixel-shadow { box-shadow: 8px 8px 0px 0px #000000; }
+        .pixel-button:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0px 0px #000000; }
+        .pixel-red { background-color: #FF0000; }
+        .text-pixel-red { color: #FF0000; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    {% include 'components/_navbar.html' %}
+
+    <main class="flex-grow py-12 px-6">
+        <div class="max-w-5xl mx-auto space-y-8">
+            
+            <div class="pixel-border pixel-shadow bg-white p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="relative">
+                        <div class="w-32 h-32 pixel-border overflow-hidden">
+                            <img src="https://ui-avatars.com/api/?name={{ profile.first_name }}+{{ profile.last_name }}&background=000&color=fff&bold=true" alt="Avatar" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 bg-black text-white p-2 pixel-border">
+                            <i data-lucide="{% if profile.role == 'admin' %}shield-check{% else %}user{% endif %}" class="w-5 h-5 text-pixel-red"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-3">
+                            <h1 class="text-4xl font-black italic uppercase tracking-tighter italic">
+                                {{ profile.first_name }} <span class="text-pixel-red">{{ profile.last_name }}</span>
+                            </h1>
+                        </div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-[0.3em]">
+                            Access Level: <span class="text-black">{% if profile.role == 'admin' %}Root Administrator{% else %}Verified Customer{% endif %}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="/profile/edit/" class="pixel-border px-6 py-3 text-[11px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-200">
+                        Edit Identity
+                    </a>
+                    {% if profile.role == 'admin' %}
+                    <a href="/admin/dashboard/" class="pixel-border pixel-red text-white px-6 py-3 text-[11px] font-black uppercase tracking-widest pixel-button transition-all duration-200">
+                        Admin Terminal
+                    </a>
+                    {% else %}
+                    <a href="/orders/" class="pixel-border pixel-red text-white px-6 py-3 text-[11px] font-black uppercase tracking-widest pixel-button transition-all duration-200">
+                        My Orders
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 pixel-border bg-white p-8 space-y-6">
+                    <h3 class="text-sm font-black uppercase italic border-b-2 border-black pb-2 flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 text-pixel-red"></i> Verified Information
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div>
+                            <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Network ID</label>
+                            <p class="font-bold italic text-black">{{ profile.email }}</p>
+                        </div>
+                        <div>
+                            <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Phone Link</label>
+                            <p class="font-bold italic text-black">{{ profile.phone|default:"+977 XXXXXXXXXX" }}</p>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Physical Node</label>
+                            <p class="font-bold italic text-black">{{ profile.address|default:"Location Not Linked" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pixel-border bg-white p-8 space-y-4">
+                    <h3 class="text-sm font-black uppercase italic border-b-2 border-black pb-2 flex items-center gap-2">
+                        <i data-lucide="settings" class="w-4 h-4 text-pixel-red"></i> Settings
+                    </h3>
+                    <div class="flex flex-col gap-3 pt-2">
+                        <a href="/logout/" class="w-full text-left p-3 border-2 border-black font-black text-[10px] uppercase italic hover:bg-black hover:text-white transition-colors">
+                            Logout
+                        </a>
+                        <button class="w-full text-left p-3 border-2 border-pixel-red text-pixel-red font-black text-[10px] uppercase italic hover:bg-pixel-red hover:text-white transition-colors">
+                            Terminate Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    {% include 'components/_footer.html' %}
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

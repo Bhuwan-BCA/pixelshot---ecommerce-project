@@ -73,3 +73,7 @@ def password_reset_confirm_view(request, token):
             
         return render(request, 'main/password_reset_confirm_page.html', { 'data': request.POST, 'errors': errors})
     return render(request, 'main/password_reset_confirm_page.html')   
+
+def profile_view(request):
+    profile = User.objects.get(id=request.user.id)
+    return render(request, 'main/profile_page.html', {'profile': profile})
