@@ -75,6 +75,37 @@ def register_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        messages.info(request, "You are already logged in.")
+        return redirect('/')
+    
+    errors = {}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        remember = request.POST.get('remember') == 'on'
+
+        if not username:
+            errors['username']= "Username is required."
+        if not password:
+            errors['password']= "Password is required."
+
+        if not errors:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+
+                if remember:
+                    request.session.set_expiry(1209600)
+                else:
+                    request.session.set_expiry(0)
+
+                messages.success(request, "Login successful!")
+                return redirect('/')
+            else:
+                messages.error(request, "Please verify your email before logging in.")
+        
+        return render(request, 'auth/login_page.html', {'data': request.POST, 'errors': errors})
     return render(request, 'auth/login_page.html')
 
 def send_verification_email(subject, message, recipient):
@@ -83,3 +114,9 @@ def send_verification_email(subject, message, recipient):
     except Exception as e:
         print(f"SMTP Error: {e}")
 
+
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been logged out.")
+    return redirect('/login/')
